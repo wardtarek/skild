@@ -1,6 +1,5 @@
 import { Link } from "@tanstack/react-router";
 import {
-	ArrowBigLeft,
 	ArrowBigUp,
 	ArrowRight,
 	Bookmark,
@@ -11,7 +10,7 @@ import {
 import { useState } from "react";
 
 function SkillCard({
-	autherEmail,
+	authorEmail,
 	category,
 	createdAt,
 	description,
@@ -20,9 +19,14 @@ function SkillCard({
 	title,
 }: SkillRecord) {
 	const [copied, setCopied] = useState(false);
-	const handleCopy = () => {
-		navigator.clipboard.writeText(installCommand);
-		setCopied(true);
+	const handleCopy = async () => {
+		try {
+			await navigator.clipboard.writeText(installCommand);
+			setCopied(true);
+		} catch {
+			setCopied(false);
+			return;
+		}
 		setTimeout(() => {
 			setCopied(false);
 		}, 2000);
@@ -51,7 +55,7 @@ function SkillCard({
 						<img src="/logo512.png" alt="auther avatar" className="avatar" />
 						<div className="auther-copy">
 							<p>Adrian</p>
-							<p>{new Date(createdAt as string).toLocaleDateString()}</p>
++							<p>{createdAt ? new Date(createdAt).toLocaleDateString() : "Date unavailable"}</p>
 						</div>
 					</div>
 					<p className="category">{category}</p>
@@ -85,7 +89,7 @@ function SkillCard({
 						</button>
 						<div className="comments">
 							<MessagesSquare size={14} />
-							<span>{autherEmail ? 1 : 0}</span>
+							<span>{authorEmail ? 1 : 0}</span>
 						</div>
 					</div>
 
